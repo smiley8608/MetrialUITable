@@ -24,22 +24,22 @@ export const GetData=(req:express.Request,res:express.Response)=>{
 export const SearchUser=(req:express.Request,res:express.Response)=>{
 
     // const _id=req.body._id
-    const first_name=req.body.first_name
-    console.log(req.body.first_name);
-    console.log(req.body.last_name);
-    
-    const last_name=req.body.last_name
-    TableModel.findOne({first_name:first_name})
+    const result =req.body.result
+    console.log(result);
+    const first_name=result[0]   
+    const last_name=result[1]
+    TableModel.find({first_name:first_name})
     .then(firstNameObject=>{
         console.log(firstNameObject);
         
-        if(!firstNameObject){
-            return res.json({message:''})
-        }else
-        console.log(firstNameObject.last_name);
-        
-         if (firstNameObject.last_name===last_name){
-            return res.json({User:firstNameObject})
+        if(firstNameObject.length<=0){
+            return res.json({message:'user not found'})
+        }else {
+            TableModel.find({last_name:last_name})
+            .then(responce=>{
+                return res.json({User:responce})
+            })
+            .catch()
         }
     })
     .catch(err=>{
@@ -71,4 +71,34 @@ export const SearchByGender=(req:express.Request,res:express.Response)=>{
     .catch(err=>{
         return res.json({message:err})
     })
+}
+
+export const SearchByLetters=(req:express.Request,res:express.Response)=>{
+    const first_name=req.body.letters
+    console.log(req.body.letters)
+    TableModel.find({first_name:first_name})
+    .then(firstnamearray=>{
+        console.log(firstnamearray);
+        
+        if(firstnamearray.length>=1){
+            return res.json({User:firstnamearray})
+            //  TableModel.find({last_name:})
+            //  .then(lastnamearray=>{
+            //     console.log(lastnamearray);
+                
+            //      if(lastnamearray.length>=1){
+            //         return res.json({User:lastnamearray})
+            //      }else{
+            //         return res.json({message:'user not found'})
+            //      }
+
+            //  })
+            //  .catch()
+
+        }else{
+            return res.json({message:'No user found'})
+        }
+    })
+    .catch()
+    
 }

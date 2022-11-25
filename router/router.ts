@@ -11,6 +11,7 @@ router.get('/getalldata',(req:express.Request,res:express.Response,next:express.
     next()
 },table.GetData)
 router.post('/searchuser',table.SearchUser)
+router.post('/searchbyletter',table.SearchByLetters)
 router.post('/searchbygender',table.SearchByGender)
 
 export default router
